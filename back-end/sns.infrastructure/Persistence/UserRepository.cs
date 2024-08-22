@@ -1,9 +1,10 @@
+using Microsoft.EntityFrameworkCore;
 using sns.application.Interfaces.Persistence;
 using sns.domain.Entities;
 
 namespace Sns.Infrastructure.Persistence;
 
-public class UserRepository : IUserRepository
+public class UserRepository(AppDbContext dbContext) : IUserRepository
 {
     public Task AddAsync(User user)
     {
@@ -22,7 +23,7 @@ public class UserRepository : IUserRepository
 
     public Task<User?> GetAsync(string email)
     {
-        throw new NotImplementedException();
+        return dbContext.Users.FirstOrDefaultAsync(x => x.Email == email);
     }
 
     public Task UpdateAsync(User user)
