@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\sns.infrastructure\sns.infrastructure.csproj" />
+    <ProjectReference Include="..\sns.domain\sns.domain.csproj" />
+  </ItemGroup>
+
 </Project>
