@@ -1,4 +1,4 @@
-namespace back_end;
+namespace sns.api;
 
 public class WeatherForecast
 {
