@@ -17,13 +17,14 @@ public class User(IPasswordHasher<User> passwordHasher) : AuditEntity
     }
     public string Name { get; set; } = null!;
     public bool isActive { get; set; }
+    public ICollection<Role> Roles { get; set; } = new List<Role>();
 
     public string SetPassword(string password)
     {
         return _passwordHasher.HashPassword(this, password);
     }
 
-    public bool ValidatePassword(string passowrd)
+    public bool IsValidPassword(string passowrd)
     {
         return _passwordHasher.VerifyHashedPassword(this, this.Password, passowrd) == PasswordVerificationResult.Success;
     }
