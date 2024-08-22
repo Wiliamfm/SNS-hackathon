@@ -2,14 +2,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using sns.application.Interfaces.Persistence;
 using sns.domain.Entities;
-using sns.infrastructure.Security;
+using Sns.Application.Interfaces.Security;
 
 namespace sns.application.Auth;
 
-public class AuthService(ILogger<AuthService> logger, JwtGenerator jwtGenerator, IUserRepository userRepository, IPasswordHasher<User> passwordHasher) : IAuthService
+public class AuthService(ILogger<AuthService> logger, IJwtGenerator jwtGenerator, IUserRepository userRepository, IPasswordHasher<User> passwordHasher) : IAuthService
 {
     private readonly ILogger<AuthService> _logger = logger;
-    private readonly JwtGenerator _jwtGenerator = jwtGenerator;
+    private readonly IJwtGenerator _jwtGenerator = jwtGenerator;
     private readonly IUserRepository _userRepository = userRepository;
 
     public async Task<AuthenticationResult> LoginAsync(string email, string password)
@@ -19,7 +19,7 @@ public class AuthService(ILogger<AuthService> logger, JwtGenerator jwtGenerator,
         {
             throw new Exception("Invalid Credentials");
         }
-        var token = _jwtGenerator.GenerateToken(user.Email, user.Id, user.Roles.Select(x => x.Name).ToArray());
+        var token = _jwtGenerator.GenerateToken(user.Email, user.Id, user.Roles.Select(role => role.Name));
         _logger.LogInformation($"User Logged in: {user.Email}");
         return new AuthenticationResult(token, user.Id, user.Email);
     }
@@ -38,7 +38,7 @@ public class AuthService(ILogger<AuthService> logger, JwtGenerator jwtGenerator,
         user.Password = user.SetPassword(password);
         await _userRepository.AddAsync(user);
         _logger.LogInformation($"User registered: {email}");
-        return new AuthenticationResult(_jwtGenerator.GenerateToken(email, user.Id, user.Roles.Select(x => x.Name).ToArray()), user.Id, email);
+        return new AuthenticationResult(_jwtGenerator.GenerateToken(user.Email, user.Id, user.Roles.Select(role => role.Name)), user.Id, email);
     }
 
     public Task LogoutAsync(string email)

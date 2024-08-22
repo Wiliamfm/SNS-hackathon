@@ -3,10 +3,11 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Sns.Application.Interfaces.Security;
 
 namespace sns.infrastructure.Security;
 
-public class JwtGenerator(IOptions<JwtSettings> settings)
+public class JwtGenerator(IOptions<JwtSettings> settings) : IJwtGenerator
 {
     private readonly JwtSettings _jwtSettings = settings.Value;
 

@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\sns.infrastructure\sns.infrastructure.csproj" />
     <ProjectReference Include="..\sns.domain\sns.domain.csproj" />
   </ItemGroup>
 
