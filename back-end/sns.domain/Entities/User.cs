@@ -3,21 +3,28 @@ using sns.domain.Entities.Common;
 
 namespace sns.domain.Entities;
 
-public class User(IPasswordHasher<User> passwordHasher) : AuditEntity
+public class User : AuditEntity
 {
-    private readonly IPasswordHasher<User> _passwordHasher = passwordHasher;
-    private string password = null!;
+    private readonly IPasswordHasher<User> _passwordHasher;
+    private string _password = null!;
 
     public Guid Id { get; set; }
     public string Email { get; set; } = null!;
     public string Password
     {
-        get => password;
-        set => password = SetPassword(value);
+        get => _password;
+        set => _password = SetPassword(value);
     }
     public string Name { get; set; } = null!;
     public bool isActive { get; set; }
     public ICollection<Role> Roles { get; set; } = new List<Role>();
+
+    public User() { }
+
+    public User(IPasswordHasher<User> passwordHasher)
+    {
+        _passwordHasher = passwordHasher;
+    }
 
     public string SetPassword(string password)
     {
